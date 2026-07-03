@@ -121,6 +121,9 @@ function App() {
       if (!res.ok) throw new Error(data?.error || "Failed to load news");
       return data.news as NewsItem[];
     },
+    // Lazy: only fetch when the News tab is active. Avoids a 1-3s web search
+    // on initial page load when the user just wants to read their blogs.
+    enabled: tab === "news",
   });
 
   // ---- Mutations ----
