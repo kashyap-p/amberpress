@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import ZAI from "z-ai-web-dev-sdk";
+import { getZAI } from "@/lib/zai";
 import type { NewsItem } from "@/lib/types";
 
 interface RawNewsResult {
@@ -33,7 +33,7 @@ export async function GET(req: Request) {
       }
     }
 
-    const zai = await ZAI.create();
+    const zai = await getZAI();
     const results = (await zai.functions.invoke("web_search", {
       query: topic,
       num,

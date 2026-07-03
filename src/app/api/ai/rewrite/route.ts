@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import ZAI from "z-ai-web-dev-sdk";
+import { getZAI } from "@/lib/zai";
 
 // POST /api/ai/rewrite
 // Body: { text: string, tone?: string } (tone default "professional").
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         ? body.tone.trim()
         : "professional";
 
-    const zai = await ZAI.create();
+    const zai = await getZAI();
     const completion = await zai.chat.completions.create({
       messages: [
         {
