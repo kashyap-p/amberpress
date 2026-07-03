@@ -1,8 +1,10 @@
-import { Feather, Github, Heart } from "lucide-react";
+import { Feather } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 export function Footer() {
+  const year = new Date().getFullYear();
+
   return (
     <footer
       className={cn(
@@ -17,7 +19,7 @@ export function Footer() {
           </span>
           <span>
             <span className="font-semibold text-foreground">AmberPress</span>{" "}
-            · AI &amp; Tech, written smarter.
+            · A personal AI &amp; tech blog.
           </span>
         </div>
 
@@ -26,21 +28,10 @@ export function Footer() {
             href="#top"
             className="hover:text-foreground transition-colors"
           >
-            Top
+            Back to top
           </a>
-          <a
-            href="https://z.ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
-          >
-            <Github className="size-3.5" />
-            Z.ai
-          </a>
-          <span className="inline-flex items-center gap-1">
-            Built with{" "}
-            <Heart className="size-3.5 text-amber-500 fill-amber-500" /> using
-            Z.ai
+          <span className="text-muted-foreground/70">
+            © {year} AmberPress
           </span>
         </nav>
       </div>

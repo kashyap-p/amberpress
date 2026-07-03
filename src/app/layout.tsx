@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AmberPress — AI-Powered Tech Blog",
   description:
-    "A modern, AI-integrated blog platform for AI & tech stories. Write, rewrite, and curate blogs with AI assistance, and discover the latest AI and technology news from around the world.",
+    "A personal, AI-integrated blog for AI & tech stories. Write, rewrite, and curate blogs with AI assistance, and discover the latest AI and technology news from around the world.",
   keywords: [
     "AI blog",
     "tech blog",
@@ -27,21 +27,17 @@ export const metadata: Metadata = {
     "AI writing assistant",
   ],
   authors: [{ name: "AmberPress" }],
-  icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
-  },
   openGraph: {
     title: "AmberPress — AI-Powered Tech Blog",
     description:
-      "Write, rewrite, and curate AI & tech blogs with AI assistance. Discover latest AI and technology news from around the world.",
+      "A personal AI & tech blog with AI-assisted writing and live tech news.",
     siteName: "AmberPress",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "AmberPress — AI-Powered Tech Blog",
-    description:
-      "AI-integrated blog platform for AI & tech stories.",
+    description: "A personal AI & tech blog with AI-assisted writing.",
   },
 };
 

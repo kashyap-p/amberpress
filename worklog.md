@@ -276,3 +276,50 @@ Stage Summary:
 - All golden-path interactions browser-verified: page render, blog list, markdown reader, create, AI generate (full blog), edit, delete, news fetch (web-search), news import, mobile + desktop responsive, light/dark theme toggle, sticky footer.
 - Fixed a real auto-refresh bug (form's onSaved was a no-op) — now create/edit/delete all refresh the list instantly via explicit refetchQueries.
 - Production-ready. Lint clean. Dev server healthy. No console/runtime errors.
+
+---
+Task ID: 4
+Agent: Orchestrator (watermark removal, optimization & input debugging)
+Task: Remove Z.ai watermarks so the project looks personal; structure & optimize code; debug every input field to confirm they all work.
+
+Work Log:
+- Read full worklog + all frontend/backend files to map every watermark and input field.
+- Removed watermarks:
+  - `src/components/blog/footer.tsx`: rewrote footer — removed "Built with ❤ using Z.ai" + the Z.ai GitHub link. Now reads "AmberPress · A personal AI & tech blog. | Back to top | © 2026 AmberPress".
+  - `src/app/layout.tsx`: removed `icons.icon` pointing to `https://z-cdn.chatglm.cn/z-ai/static/logo.svg` (Z.ai CDN). Kept "AmberPress" as author (it's the project name, not a watermark).
+  - `next.config.ts`: added `devIndicators: false` to hide the "Open Next.js Dev Tools" overlay button. Required dev-server restart to take effect.
+- Optimized `src/app/page.tsx`:
+  - Removed dead code: `createBlog` and `updateBlog` mutations were defined but NEVER called (the BlogFormDialog does its own fetch + calls `handleSaved`). Removed both, kept only `deleteBlogMut`. Added a clarifying comment.
+  - Fixed malformed markdown in `importNews`: content was `_[Imported from ${host}]_*` (broken italic/bold mix) → fixed to `_[Imported from ${host}]_`.
+- Browser-tested EVERY input field (agent-browser):
+  1. Search blogs (debounced, filters by title/content/tags) ✓
+  2. Category filter select (7 categories) ✓
+  3. Source filter select (All/Mine/Imported) ✓
+  4. Title input ✓
+  5. Category select (in form) ✓
+  6. Author input ✓
+  7. Tags input ✓
+  8. Cover image URL input (image displays on card) ✓
+  9. Generate-from-topic toggle (reveals panel) ✓
+  10. Topic input (Enter key also triggers generate) ✓
+  11. Gen tone select (changed to storytelling) ✓
+  12. Rewrite tone select (changed to casual) ✓
+  13. Content textarea ✓
+  14. Preview toggle (renders markdown, toggles back to Edit) ✓
+  15. Excerpt textarea ✓
+  16. Summarize → excerpt AI button (filled excerpt from content) ✓
+  17. Improve AI button (improved content grammar/style) ✓
+  18. Rewrite AI button (rewrote content — required scrollIntoView first; POST /api/ai/rewrite 200) ✓
+  19. Generate AI button (full blog: title+content+excerpt+tags, storytelling tone, 11s) ✓
+  20. Create blog button (all fields persisted, card appeared instantly) ✓
+  21. News topic search input (debounced, fetched quantum computing news) ✓
+  22. Refresh button (spinner + refetch) ✓
+  23. Import to my blogs (prefilled form with news data + fixed markdown) ✓
+- Note on Rewrite button: agent-browser `click @ref` initially failed to fire the React onClick because the button was scrolled out of the Dialog viewport. Using `scrollintoview` before `click` resolved it. The button itself works correctly — confirmed via POST /api/ai/rewrite 200 in dev log.
+- Final verification: footer text clean (no Z.ai), 0 dev-indicator buttons, 0 "Z.ai" text mentions anywhere on the page, lint 0 errors, 3 blogs intact.
+
+Stage Summary:
+- All Z.ai watermarks removed (footer, favicon, dev-tools overlay). Project now reads as a personal blog.
+- Code optimized: removed 2 dead mutations (~40 lines), fixed malformed import markdown.
+- ALL 23 input fields / interactive controls browser-verified working.
+- Lint clean. Dev server healthy. No console/runtime errors.

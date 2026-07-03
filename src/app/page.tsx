@@ -124,39 +124,9 @@ function App() {
   });
 
   // ---- Mutations ----
-  const createBlog = useMutation({
-    mutationFn: async (input: BlogInput) => {
-      const res = await fetch("/api/blogs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(input),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Create failed");
-      return data.blog as Blog;
-    },
-    onSuccess: async () => {
-      // Explicitly refetch and await so the UI always syncs with the server.
-      await qc.refetchQueries({ queryKey: ["blogs"] });
-    },
-  });
-
-  const updateBlog = useMutation({
-    mutationFn: async ({ id, input }: { id: string; input: BlogInput }) => {
-      const res = await fetch(`/api/blogs/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(input),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Update failed");
-      return data.blog as Blog;
-    },
-    onSuccess: async () => {
-      await qc.refetchQueries({ queryKey: ["blogs"] });
-    },
-  });
-
+  // NOTE: Create & edit are persisted by <BlogFormDialog> via its own fetch;
+  // on completion it calls `handleSaved`, which refetches the blogs query.
+  // Only delete goes through a page-level mutation (see confirmDelete).
   const deleteBlogMut = useMutation({
     mutationFn: async (id: string) => {
       const res = await fetch(`/api/blogs/${id}`, { method: "DELETE" });
@@ -190,7 +160,9 @@ function App() {
   function importNews(item: NewsItem) {
     const prefill: BlogInput = {
       title: item.title,
-      content: item.snippet ? `> ${item.snippet}\n\n_[Imported from ${item.host_name}]_*` : "",
+      content: item.snippet
+        ? `> ${item.snippet}\n\n_[Imported from ${item.host_name}]_`
+        : "",
       excerpt: item.snippet || "",
       tags: "AI, tech, news",
       category: "Technology",
